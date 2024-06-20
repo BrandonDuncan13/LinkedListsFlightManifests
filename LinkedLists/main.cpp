@@ -7,30 +7,33 @@
 #include <string.h>
 #include <iomanip>
 
+
+// Function Prototypes
 void driver();
-int grabInput();
-int flightNum();
-int passengerInput(int);
-std::string passengerName();
+int mainMenuInput();
+int flightNumInput();
+int passengerMenuInput(int);
+std::string passengerNameInput();
 void displayMainMenu();
 void displayPassMenu(int);
 void printFlightManifests(SingleLinkedList);
 
-int main()
+int main() // Flights Manifests Program Using Doubly Linked List and Singly Linked Lists
 {
-	int option = 0;
-	int optionTwo = 0;
+	// User makes choices at main menu and passenger menu
+	int mainMenuOption = 0;
+	int pasMenuOption = 0;
 
 	// creating a single linked list of flights that has no nodes in it
 	SingleLinkedList flights;
 
-	do // the entire program exists inside of this do-while and can be used as long as user wants
+	do // main menu -> make a change or reservation, print all manifests, driver, or exit the program
 	{
-		option = grabInput();
+		mainMenuOption = mainMenuInput();
 
-		if (option == 1) // main menu -> make a change or reservation
+		if (mainMenuOption == 1) // make a change or reservation
 		{
-			int flightNumber = flightNum(); // for example 2430
+			int flightNumber = flightNumInput(); // for example 2430
 			Node* flight = flights.findNode(flightNumber);
 
 			if (flight == nullptr) // if the flight is not found, a new flight is created
@@ -41,22 +44,22 @@ int main()
 
 			do // passenger menu -> insert, remove, and view passengers on the flight
 			{
-				optionTwo = passengerInput(flightNumber);
+				pasMenuOption = passengerMenuInput(flightNumber);
 
 				std::string passenger;
 
-				if (optionTwo == 1) // insert a passenger into the selected flight
+				if (pasMenuOption == 1) // insert a passenger into the selected flight
 				{
 					std::cout << "Enter the name of the passenger you want to add to flight " << flightNumber << "." << std::endl;
-					passenger = passengerName();
+					passenger = passengerNameInput();
 
 					// add the passenger to the current flight
 					flight->m_passengers->addNodeAtTail(passenger);
 				}
-				else if (optionTwo == 2) // remove a passenger from the selected flight
+				else if (pasMenuOption == 2) // remove a passenger from the selected flight
 				{
 					std::cout << "Enter the name of the passenger you want to remove from flight " << flightNumber << "." << std::endl;
-					passenger = passengerName();
+					passenger = passengerNameInput();
 
 					// search flight's passenger list to find node with the passenger
 					NodePlus* passengerNode = flight->m_passengers->findNode(passenger);
@@ -66,33 +69,33 @@ int main()
 						std::cout << "The passenger you entered was not found on this flight. Please try again!\n" << std::endl;
 						// the user returns to the passenger menu now
 					}
-					else
+					else // the passenger is found
 					{
 						// remove the passenger from the list or flight
 						flight->m_passengers->deleteNode(passengerNode);
 						std::cout << "\nThe passenger " << passenger << " was deleted from the flight." << std::endl;
 					}
 				}
-				else if (optionTwo == 3) // List the passengers on the selected flight
+				else if (pasMenuOption == 3) // List the passengers on the selected flight
 				{
 					flight->m_passengers->printList();
 				}
-				else if (optionTwo == 4) // List the passengers on the selected flight in reverse order
+				else if (pasMenuOption == 4) // List the passengers on the selected flight in reverse order
 				{
 					flight->m_passengers->printReverseList();
 				}
-				else // exit the selected flight
+				else if (pasMenuOption == 0) // exit the selected flight
 				{
 					std::cout << "Exiting flight " << flightNumber << ".\n" << std::endl;
 				}
 			}
-			while (!(optionTwo == 0)); // end of the passenger menu do while loop
+			while (!(pasMenuOption == 0)); // end of the passenger menu do while loop
 		}
-		else if (option == 2) // main menu print all manifests
+		else if (mainMenuOption == 2) // main menu print all manifests
 		{
 			printFlightManifests(flights);
 		}
-		else if (option == 3) // executes the driver function to test the program
+		else if (mainMenuOption == 3) // executes the driver function to test the program
 		{
 			driver();
 		}
@@ -101,17 +104,17 @@ int main()
 			std::cout << "Exiting the program." << std::endl;
 		}
 	}
-	while (!(option == 0)); // end of the menu do while loop
+	while (!(mainMenuOption == 0)); // end of the menu do while loop
 
 	// waits for enter key press
 	std::cin.get();
 }
 
+
+// Standard Input Validation Functions
 template <typename T>
 void validateInput(T& userInput)
 {
-	std::cin >> std::setw(1) >> userInput; // this should mean that only one option is grabbed -> so only 1 is grabbed when '1 2' is entered
-
 	// Input Validation
 	while (!std::cin.good())
 	{
@@ -121,6 +124,7 @@ void validateInput(T& userInput)
 
 		// have the user re-enter input
 		std::cout << "Invalid input! Please try again." << std::endl;
+		// this should mean that only one option is grabbed -> so only 1 is grabbed when '1 2' is entered
 		std::cin >> std::setw(1) >> userInput;
 	}
 
@@ -144,7 +148,9 @@ std::string validateString(std::string name)
 	return name;
 }
 
-void displayMainMenu()
+
+// Display Functions
+void displayMainMenu() // main menu with options
 {
 	std::cout << std::setw(12) << "=== MAIN MENU ===" << std::endl;
 	std::cout << "1 - Press to make or change a reservation." << std::endl;
@@ -152,9 +158,10 @@ void displayMainMenu()
 	std::cout << "3 - For Driver." << std::endl;
 	std::cout << "0 - Exit program\n" << std::endl;
 }
-void displayPassMenu(int flight)
+
+void displayPassMenu(int flight) // passenger menu with options
 {
-	std::cout << std::setw(12) << "=== List of passengers ===" << std::endl;
+	std::cout << std::setw(12) << "=== FLIGHT PASSENGERS ===" << std::endl;
 	std::cout << "1 - Insert passenger onto flight " << flight << "." << std::endl;
 	std::cout << "2 - Remove passenger from flight " << flight << "." << std::endl;
 	std::cout << "3 - List passengers on flight " << flight << "." << std::endl;
@@ -162,14 +169,18 @@ void displayPassMenu(int flight)
 	std::cout << "0 - Exit flight " << flight << ".\n" << std::endl;
 }
 
-int grabInput()
+
+// User Input Functions
+int mainMenuInput() // prompts user to enter a main menu option until they enter a valid one
 {
 	displayMainMenu();
 
+	// asks user to enter a main menu option and validates input
 	int userInput = 0;
+	std::cin >> std::setw(1) >> userInput;
 	validateInput(userInput);
 
-	while (!(userInput >= 0 && userInput <= 3))
+	while (!(userInput >= 0 && userInput <= 3)) // main menu options are between 0 and 3
 	{
 		std::cout << "Invalid option. Please make one of the following selections:" << "\n" << std::endl;
 		// display main menu
@@ -180,14 +191,16 @@ int grabInput()
 	return userInput;
 }
 
-int flightNum() // prompts user to enter a flight number until they enter a valid one
+int flightNumInput() // prompts user to enter a flight number until they enter a valid one
 {
 	std::cout << "Please Enter a Flight Number:" << std::endl;
 
+	// asks user to enter a flight number and validates input
 	int userFlight = 0;
+	std::cin >> std::setw(1) >> userFlight;
 	validateInput(userFlight);
 
-	while (!(userFlight >= 0 && userFlight <= 3000))
+	while (!(userFlight >= 0 && userFlight <= 3000)) // flight numbers are between 0 and 3000
 	{
 		std::cout << "Invalid flight. Please enter a flight number between 0-3000:\n" << std::endl;
 		std::cout << "Please Enter a Flight Number:" << std::endl;
@@ -199,14 +212,16 @@ int flightNum() // prompts user to enter a flight number until they enter a vali
 	return userFlight;
 }
 
-int passengerInput(int flight)
+int passengerMenuInput(int flight) // prompts user to enter a passenger menu option until they enter a valid one
 {
 	displayPassMenu(flight);
 
+	// asks user to enter a passenger menu option and validates input
 	int userInput = 0;
+	std::cin >> std::setw(1) >> userInput;
 	validateInput(userInput);
 
-	while (!(userInput >= 0 && userInput <= 4))
+	while (!(userInput >= 0 && userInput <= 4)) // passenger menu options are between 0 and 4
 	{
 		std::cout << "Invalid option. Please make one of the following selections:\n" << std::endl;
 		// display the passenger menu
@@ -217,12 +232,14 @@ int passengerInput(int flight)
 	return userInput;
 }
 
-std::string passengerName()
+std::string passengerNameInput() // prompts user to enter a passenger name until they enter a valid one
 {
 	std::string passenger, first = "", last = "";
 
+	// get a valid first name
 	std::cout << "The passenger's first name: " << std::endl;
 	first = validateString(first);
+	// then get a valid last name
 	std::cout << "The passenger's last name: " << std::endl;
 	last = validateString(last);
 	passenger = last + " " + first;
@@ -230,6 +247,8 @@ std::string passengerName()
 	return passenger;
 }
 
+
+// Print Function
 void printFlightManifests(SingleLinkedList flights)
 {
 	Node* flight = flights.m_head;
@@ -258,6 +277,9 @@ void printFlightManifests(SingleLinkedList flights)
 	std::cout << "\n";
 }
 
+
+
+// Program Driver (Test) Function
 void driver() // used to test the program by hardcoding values
 {
 	SingleLinkedList flightList;
