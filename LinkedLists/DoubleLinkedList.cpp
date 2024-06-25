@@ -54,7 +54,7 @@ void DoubleLinkedList::addNodeAtHead(std::string passenger) // this function is 
 
 	// sets head to the new node which takes care of all situations
 	m_head = node;
-	std::cout << "\nThe passenger " << passenger << " was added to the flight." << std::endl;
+	std::cout << "\nThe passenger " << passenger << " was added to the flight.\n" << std::endl;
 }
 
 void DoubleLinkedList::addNodeAtTail(std::string passenger)
@@ -90,7 +90,7 @@ void DoubleLinkedList::addNodeAtTail(std::string passenger)
 	current->m_next = node;
 	node->m_prev = current;
 	m_tail = node; // the tail is updated
-	std::cout << "\nThe passenger " << passenger << " was added to the flight." << std::endl;
+	std::cout << "\nThe passenger " << passenger << " was added to the flight.\n" << std::endl;
 
 	bubbleSort(); // when a passenger is entered onto the double linked list the list will be sorted by passenger name
 }
@@ -137,7 +137,9 @@ void DoubleLinkedList::deleteNode(NodePlus* passengerNode)
 		m_tail = current->m_prev;
 	}
 	// delete the current node which is at the specified position
+	std::cout << "\nThe passenger " << current->m_name << " was deleted from the flight.\n" << std::endl;
 	delete current;
+
 	return;
 }
 
