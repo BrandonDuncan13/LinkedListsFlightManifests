@@ -4,36 +4,48 @@
 #include <iostream>
 
 // default constructor
-SingleLinkedList::SingleLinkedList()
+SingleLinkedList::SingleLinkedList() // the single linked list is created with no nodes
 {
-	// when a linked list is created it has no nodes inside of it
 	m_head = nullptr;
 }
 
-// method definitions
-Node* SingleLinkedList::findNode(int flightNumber)
+// destructor
+SingleLinkedList::~SingleLinkedList() // delete all flight nodes in the list
 {
 	Node* current = m_head;
 
-	if (current == nullptr)
-	{
-		return nullptr; // position variable will be set to the return value
-	}
-	
 	while (current != nullptr)
 	{
-		if (current->m_data == flightNumber)
+		Node* next = current->m_next;
+		delete current;
+		current = next;
+	}
+}
+
+// method definitions
+Node* SingleLinkedList::findNode(int flightNumber) // find a flight node with a certain flight number
+{
+	Node* current = m_head;
+
+	if (current == nullptr) // no flight nodes in the list
+	{
+		return nullptr;
+	}
+	
+	while (current != nullptr) // loops through each node in the list to find the node with the flight number
+	{
+		if (current->m_data == flightNumber) // if the flight number is found we return the node
 		{
 			return current;
 		}
 		current = current->m_next;
 	}
+
 	// if the flight number is not found we return a sentinel value
 	return nullptr;
 }
 
-// new nodes will only be added to the end of the list
-void SingleLinkedList::addNode(int flightNumber)
+void SingleLinkedList::addNode(int flightNumber) // new nodes will only be added to the end of the list
 {
 	// create a new node
 	Node* node = new Node(flightNumber); // here m_dll is set to point to NULL
@@ -58,7 +70,7 @@ void SingleLinkedList::addNode(int flightNumber)
 	current->m_next = node;
 }
 
-void SingleLinkedList::deleteNode(int position)
+void SingleLinkedList::deleteNode(int position) // delete a node at a certain position
 {
 	Node* current = m_head;
 	int i;

@@ -14,11 +14,14 @@ public:
 	// default constructor
 	DoubleLinkedList();
 
+	// destructor
+	~DoubleLinkedList();
+
 	// methods
 	NodePlus* findNode(std::string passenger);
 	void addNodeAtHead(std::string passenger);
 	void addNodeAtTail(std::string passenger);
-	void deleteNode(NodePlus* passengerNode); // position is the position of the node in the linked list
+	void deleteNode(std::string passenger);
 	void bubbleSort();
 	void printList();
 	void printReverseList();

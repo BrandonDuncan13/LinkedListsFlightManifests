@@ -61,19 +61,8 @@ int main() // Flights Manifests Program Using Doubly Linked List and Singly Link
 					std::cout << "Enter the name of the passenger you want to remove from flight " << flightNumber << "." << std::endl;
 					passenger = passengerNameInput();
 
-					// search flight's passenger list to find node with the passenger
-					NodePlus* passengerNode = flight->m_passengers->findNode(passenger);
-
-					if (passengerNode == nullptr) // the passenger is not found
-					{
-						std::cout << "The passenger you entered was not found on this flight. Please try again!\n" << std::endl;
-						// the user returns to the passenger menu now
-					}
-					else // the passenger is found
-					{
-						// remove the passenger from the list or flight
-						flight->m_passengers->deleteNode(passengerNode);
-					}
+					// try to delete the passenger from the list or flight
+					flight->m_passengers->deleteNode(passenger);
 				}
 				else if (pasMenuChoice == 3) // List the passengers on the selected flight
 				{

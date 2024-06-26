@@ -4,15 +4,27 @@
 #include <iostream>
 
 // default constructor
-DoubleLinkedList::DoubleLinkedList()
+DoubleLinkedList::DoubleLinkedList() // the double linked list is created with 0 nodes
 {
-	// the double linked list is created with 0 nodes
 	this->m_head = nullptr;
 	this->m_tail = nullptr;
 }
 
+// destructor
+DoubleLinkedList::~DoubleLinkedList() // delete all passenger nodes in the list
+{
+	NodePlus* current = m_head;
+
+	while (current != nullptr)
+	{
+		NodePlus* next = current->m_next;
+		delete current;
+		current = next;
+	}
+}
+
 // methods
-NodePlus* DoubleLinkedList::findNode(std::string passenger)
+NodePlus* DoubleLinkedList::findNode(std::string passenger) // find a passenger node with a certain name
 {
 	NodePlus* current = m_head;
 
@@ -57,7 +69,7 @@ void DoubleLinkedList::addNodeAtHead(std::string passenger) // this function is 
 	std::cout << "\nThe passenger " << passenger << " was added to the flight.\n" << std::endl;
 }
 
-void DoubleLinkedList::addNodeAtTail(std::string passenger)
+void DoubleLinkedList::addNodeAtTail(std::string passenger) // add a passenger node to the end of the list
 {
 	// handles the case of an empty list
 	if (m_head == nullptr)
@@ -95,52 +107,55 @@ void DoubleLinkedList::addNodeAtTail(std::string passenger)
 	bubbleSort(); // when a passenger is entered onto the double linked list the list will be sorted by passenger name
 }
 
-void DoubleLinkedList::deleteNode(NodePlus* passengerNode)
+// Should just the passenger name be passed into the list??
+void DoubleLinkedList::deleteNode(std::string passenger) // delete a specific passenger node from the list
 {
-	// when the list is empty or the node isn't found
-	if (m_head == nullptr || passengerNode == nullptr)
+	if (m_head == nullptr) // when the list is empty 
 	{
-		std::cout << "Either the list is empty or the node does not exist." << std::endl;
+		std::cout << "There are no passengers currently on this flight." << std::endl;
+
 		return;
 	}
 
-	NodePlus* current = findNode(passengerNode->m_name);
-	// if node is not found
-	if (current == nullptr)
+	// find the node to be deleted
+	NodePlus* current = findNode(passenger);
+
+	if (current == nullptr) // if passenger node is not found in the list
 	{
+		std::cout << "The passenger you entered was not found on this flight. Please try again!\n" << std::endl;
+
 		return;
 	}
-	// if node to be deleted is the head node
-	if (current == m_head)
+
+	if (current == m_head) // if node to be deleted is the head node
 	{
-		// if there's only one node in the list
-		if (m_head == m_tail)
+		m_head = current->m_next;
+		if (m_head != nullptr) // if there are more nodes in the list
+		{
+			m_head->m_prev = nullptr;
+		}
+		else // if the list becomes empty
 		{
 			m_tail = nullptr;
 		}
-		m_head = current->m_next;
 	}
-	// change next if node to be deleted is not last node
-	if (current->m_next != nullptr)
+	else if (current == m_tail) // if node to be deleted is the tail node
+	{
+		m_tail = current->m_prev;
+		if (m_tail != nullptr) // if there are more nodes in the list
+		{
+			m_tail->m_next = nullptr;
+		}
+	}
+	else // node to be deleted is in the middle
 	{
 		current->m_next->m_prev = current->m_prev;
-	}
-	// change prev if node to be deleted is not first node
-	if (current->m_prev != nullptr)
-	{
 		current->m_prev->m_next = current->m_next;
 	}
-	// if node to be deleted is the tail node
-	if (current == m_tail)
-	{
-		// the tail is set to the 2nd to last node so last node can be deleted
-		m_tail = current->m_prev;
-	}
-	// delete the current node which is at the specified position
+
+	// delete the current passenger node from the flight or list
 	std::cout << "\nThe passenger " << current->m_name << " was deleted from the flight.\n" << std::endl;
 	delete current;
-
-	return;
 }
 
 void DoubleLinkedList::bubbleSort() // sorting the double linked list by the passenger names using a bubble sort
@@ -174,7 +189,7 @@ void DoubleLinkedList::bubbleSort() // sorting the double linked list by the pas
 	} while (swapped);
 }
 
-void DoubleLinkedList::printList()
+void DoubleLinkedList::printList() // prints the passengers on flight in order
 {
 	NodePlus* head = m_head;
 
@@ -195,7 +210,7 @@ void DoubleLinkedList::printList()
 	return;
 }
 
-void DoubleLinkedList::printReverseList()
+void DoubleLinkedList::printReverseList() // prints the passengers on flight in reverse order
 {
 	NodePlus* tail = m_tail;
 

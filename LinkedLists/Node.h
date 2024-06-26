@@ -7,16 +7,24 @@
 class Node
 {
 public:
-
-	int m_data;
-	Node* m_next;
-	DoubleLinkedList* m_passengers; // pointer to a DLL node
+	// pointer to a DLL node
+	DoubleLinkedList* m_passengers;
 
 	// default constructor
 	Node();
 
 	// constructor with parameter
 	Node(int data);
+
+	// destructor
+	~Node();
+
+	// friend class (instead of getters and setters)
+	friend class SingleLinkedList;
+
+private:
+	int m_data;
+	Node* m_next;
 };
 
 #endif
