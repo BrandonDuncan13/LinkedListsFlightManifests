@@ -23,7 +23,7 @@ SingleLinkedList::~SingleLinkedList() // delete all flight nodes in the list
 }
 
 // method definitions
-Node* SingleLinkedList::findNode(int flightNumber) // find a flight node with a certain flight number
+Node* SingleLinkedList::findNode(const int& flightNumber) // find a flight node with a certain flight number
 {
 	Node* current = m_head;
 
@@ -45,13 +45,12 @@ Node* SingleLinkedList::findNode(int flightNumber) // find a flight node with a 
 	return nullptr;
 }
 
-void SingleLinkedList::addNode(int flightNumber) // new nodes will only be added to the end of the list
+void SingleLinkedList::addNode(const int& flightNumber) // new nodes will only be added to the end of the list
 {
-	// create a new node
-	Node* node = new Node(flightNumber); // here m_dll is set to point to NULL
+	// create a new node with the flight number
+	Node* node = new Node(flightNumber); // this flight node points to an empty DLL
 
-	// add a node when the list is empty
-	if (m_head == nullptr)
+	if (m_head == nullptr) // add a node when the list is empty
 	{
 		m_head = node;
 
@@ -59,14 +58,13 @@ void SingleLinkedList::addNode(int flightNumber) // new nodes will only be added
 	}
 
 	Node* current = m_head;
-	// traversing through the linked list
-	while (current->m_next != nullptr)
+
+	while (current->m_next != nullptr) // loop through the list until you reach the end
 	{
-		// update current
 		current = current->m_next;
 	}
-	// now you should be at the end of the linked list
-	// the new node is added to the end of the list and it's next is already pointing to NULL
+	
+	// current now points to the last node in the list
 	current->m_next = node;
 }
 

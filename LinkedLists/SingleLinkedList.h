@@ -13,9 +13,15 @@ public:
 	// Destructor
 	~SingleLinkedList();
 
+	// getter method
+	Node* getHead() const
+	{
+		return m_head;
+	}
+
 	// methods
-	Node* findNode(int flightNumber);
-	void addNode(int flightNumber);
+	Node* findNode(const int& flightNumber);
+	void addNode(const int& flightNumber);
 	void deleteNode(int position); // position is the position of the node in the single linked list
 
 private:

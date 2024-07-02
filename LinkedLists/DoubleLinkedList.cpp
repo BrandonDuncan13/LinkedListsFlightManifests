@@ -24,7 +24,7 @@ DoubleLinkedList::~DoubleLinkedList() // delete all passenger nodes in the list
 }
 
 // methods
-NodePlus* DoubleLinkedList::findNode(std::string passenger) // find a passenger node with a certain name
+NodePlus* DoubleLinkedList::findNode(const std::string& passenger) // find a passenger node with a certain name
 {
 	NodePlus* current = m_head;
 
@@ -47,7 +47,7 @@ NodePlus* DoubleLinkedList::findNode(std::string passenger) // find a passenger 
 	return current;
 }
 
-void DoubleLinkedList::addNodeAtHead(std::string passenger) // this function is only called by addNodeAtTail() but I figured it's good practice to have
+void DoubleLinkedList::addNodeAtHead(const std::string& passenger) // this function is only called by addNodeAtTail() but I figured it's good practice to have
 {
 	// instantiating a new node
 	NodePlus* node = new NodePlus(passenger);
@@ -69,7 +69,7 @@ void DoubleLinkedList::addNodeAtHead(std::string passenger) // this function is 
 	std::cout << "\nThe passenger " << passenger << " was added to the flight.\n" << std::endl;
 }
 
-void DoubleLinkedList::addNodeAtTail(std::string passenger) // add a passenger node to the end of the list
+void DoubleLinkedList::addNodeAtTail(const std::string& passenger) // add a passenger node to the end of the list
 {
 	// handles the case of an empty list
 	if (m_head == nullptr)
@@ -108,7 +108,7 @@ void DoubleLinkedList::addNodeAtTail(std::string passenger) // add a passenger n
 }
 
 // Should just the passenger name be passed into the list??
-void DoubleLinkedList::deleteNode(std::string passenger) // delete a specific passenger node from the list
+void DoubleLinkedList::deleteNode(const std::string& passenger) // delete a specific passenger node from the list
 {
 	if (m_head == nullptr) // when the list is empty 
 	{

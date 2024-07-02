@@ -15,7 +15,7 @@ int mainMenuInput();
 int flightNumInput();
 int passengerMenuInput(int);
 std::string passengerNameInput();
-void printFlightManifests(SingleLinkedList);
+void printFlightManifests(const SingleLinkedList& flights);
 void driver();
 
 int main() // Flights Manifests Program Using Doubly Linked List and Singly Linked Lists
@@ -58,17 +58,24 @@ int main() // Flights Manifests Program Using Doubly Linked List and Singly Link
 				}
 				else if (pasMenuChoice == 2) // remove a passenger from the selected flight
 				{
+					if (flight->m_passengers->getHead() == nullptr) // if there are no passengers on the flight don't ask for input
+					{
+						std::cout << "There are currently no passengers on this flight.\n" << std::endl;
+
+						continue;
+					}
+
 					std::cout << "Enter the name of the passenger you want to remove from flight " << flightNumber << "." << std::endl;
 					passenger = passengerNameInput();
 
 					// try to delete the passenger from the list or flight
 					flight->m_passengers->deleteNode(passenger);
 				}
-				else if (pasMenuChoice == 3) // List the passengers on the selected flight
+				else if (pasMenuChoice == 3) // list the passengers on the selected flight
 				{
 					flight->m_passengers->printList();
 				}
-				else if (pasMenuChoice == 4) // List the passengers on the selected flight in reverse order
+				else if (pasMenuChoice == 4) // list the passengers on the selected flight in reverse order
 				{
 					flight->m_passengers->printReverseList();
 				}
@@ -93,7 +100,7 @@ int main() // Flights Manifests Program Using Doubly Linked List and Singly Link
 		{
 			driver();
 		}
-		else // exits the program
+		else if (mainMenuChoice == 0)// exits the program
 		{
 			std::cout << "Exiting the program." << std::endl;
 
@@ -221,7 +228,7 @@ int passengerMenuInput(int flight) // prompts user to enter a passenger menu opt
 	std::cin >> std::setw(1) >> userInput;
 	validateInput(userInput);
 
-	while (!(userInput >= 0 && userInput <= 4)) // passenger menu options are between 0 and 4
+	while (!(userInput >= 0 && userInput <= 5)) // passenger menu options are between 0 and 5
 	{
 		std::cout << "Invalid option. Please make one of the following selections:\n" << std::endl;
 		// display the passenger menu
@@ -250,9 +257,9 @@ std::string passengerNameInput() // prompts user to enter a passenger name until
 
 
 // Print Function
-void printFlightManifests(SingleLinkedList flights)
+void printFlightManifests(const SingleLinkedList& flights) // prints all the passengers on each flight
 {
-	Node* flight = flights.m_head;
+	Node* flight = flights.getHead();
 
 	if (flight == nullptr) // when there are no flights found return some text
 	{
@@ -261,23 +268,26 @@ void printFlightManifests(SingleLinkedList flights)
 
 	while (flight != nullptr) // runs while a flight is being pointed to
 	{
-		NodePlus* passenger = flight->m_passengers->m_head;
+		NodePlus* passenger = flight->m_passengers->getHead();
 
 		if (passenger != nullptr) // the flight will be printed if at least one passenger exists on it
 		{
-			std::cout << "\n" << "Flight Number : " << flight->m_data << std::endl;
+			std::cout << "\n" << "Flight Number : " << flight->getData() << std::endl;
 
 			while (passenger != nullptr) // cycles through flight's passengers list, printing each passenger
 			{
-				std::cout << "Name: " << passenger->m_name << std::endl;
-				passenger = passenger->m_next;
+				std::cout << "Name: " << passenger->getName() << std::endl;
+				passenger = passenger->getNext();
 			}
 		}
-		flight = flight->m_next; // goes to the next flight in the linked list
+		else if (passenger == nullptr) // if no passengers are found on the flight
+		{
+			std::cout << "There are currently no flights with passengers. Add some passengers to the flight(s)." << std::endl;
+		}
+		flight = flight->getNext(); // goes to the next flight in the linked list
 	}
 	std::cout << "\n";
 }
-
 
 
 // Program Driver (Test) Function
@@ -310,7 +320,7 @@ void driver() // used to test the program by hardcoding values
 	flight->m_passengers->addNodeAtTail(passenger);
 	std::cout << "\n";
 
-	std::cout << "\n" << "Flight Number : " << flight->m_data << std::endl;
+	std::cout << "\n" << "Flight Number : " << flight->getData() << std::endl;
 	flight->m_passengers->printList();
 	std::cout << "\n";
 
@@ -332,12 +342,11 @@ void driver() // used to test the program by hardcoding values
 	flight->m_passengers->addNodeAtTail(passenger);
 	std::cout << "\n";
 
-	std::cout << "\n" << "Flight Number : " << flight->m_data << std::endl;
+	std::cout << "\n" << "Flight Number : " << flight->getData() << std::endl;
 	flight->m_passengers->printList();
 
 	// removing Loki from the flight
-	NodePlus* passengerNode = flight->m_passengers->findNode(passenger);
-	flight->m_passengers->deleteNode(passengerNode);
+	flight->m_passengers->deleteNode(passenger);
 	std::cout << "\n" << passenger << " successfully saved from running in an Iditerod" << "\n\n" << std::endl;
 
 	// third flight #2750 changes and reservations
@@ -348,7 +357,7 @@ void driver() // used to test the program by hardcoding values
 
 	std::cout << "Current Flight: " << flightNumber;
 
-	passengerNode = flight->m_passengers->findNode(passenger);
+	NodePlus* passengerNode = flight->m_passengers->findNode(passenger);
 
 	flight->m_passengers->addNodeAtTail(passenger); // loki the mutt is added to flight
 	std::cout << "\n\n";
@@ -357,13 +366,13 @@ void driver() // used to test the program by hardcoding values
 	flightNumber = 2515;
 	flight = flightList.findNode(flightNumber);
 	std::cout << "Current Flight: " << flightNumber;
-	std::cout << "\n" << "Flight Number : " << flight->m_data << std::endl;
+	std::cout << "\n" << "Flight Number : " << flight->getData() << std::endl;
 	flight->m_passengers->printList();
 	std::cout << "\n";
 
 	flightNumber = 2750;
 	flight = flightList.findNode(flightNumber);
 	std::cout << "Current Flight: " << flightNumber;
-	std::cout << "\n" << "Flight Number : " << flight->m_data << std::endl;
+	std::cout << "\n" << "Flight Number : " << flight->getData() << std::endl;
 	flight->m_passengers->printList();
 }

@@ -9,7 +9,7 @@ Node::Node() // default constructor
 	this->m_passengers = new DoubleLinkedList(); // setting to an empty dll so we can start using it
 }
 
-Node::Node(int data) // constructor accepting flight number data
+Node::Node(const int& data) // constructor accepting flight number data
 {
 	this->m_data = data;
 	this->m_next = nullptr;

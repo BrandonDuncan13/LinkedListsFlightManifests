@@ -11,7 +11,7 @@ NodePlus::NodePlus() // creates a passenger node with no name or attached nodes
 }
 
 // constructor with parameter for name
-NodePlus::NodePlus(std::string name)
+NodePlus::NodePlus(const std::string& name)
 {
 	this->m_name = name;
 	this->m_prev = nullptr;

@@ -8,12 +8,27 @@ class NodePlus
 public:
 	// default constructor
 	NodePlus();
-
 	// constructor with parameter
-	NodePlus(std::string name);
+	NodePlus(const std::string& name);
 
 	// destructor
 	~NodePlus();
+
+	// getter methods
+	std::string getName() const
+	{
+		return m_name;
+	}
+
+	NodePlus* getNext() const
+	{
+		return m_next;
+	}
+
+	NodePlus* getPrev() const
+	{
+		return m_prev;
+	}
 
 	// friend class (instead of getters and setters)
 	friend class DoubleLinkedList;
